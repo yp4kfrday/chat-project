@@ -48,24 +48,28 @@ func ServeWs(server *Server, w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Client) readPump() {
-	defer func() {
-		c.Server.Unregister <- c
-		c.Conn.Close()
-	}()
+    defer func() {
+        c.Server.Unregister <- c
+        c.Conn.Close()
+    }()
 
-	for {
-		_, data, err := c.Conn.ReadMessage()
-		if err != nil {
-			log.Println("[ERROR] Read error:", err)
-			break
-		}
-		message := models.Message{
-			Username: c.Username,
-			Content:  string(data),
-		}
-		msgBytes, _ := json.Marshal(message)
-		c.Server.Broadcast <- msgBytes
-	}
+    for {
+        _, data, err := c.Conn.ReadMessage()
+        if err != nil {
+            log.Println("[ERROR] Read error:", err)
+            break
+        }
+
+        var message models.Message
+        err = json.Unmarshal(data, &message)
+        if err != nil {
+            log.Println("[ERROR] JSON Unmarshal error:", err)
+            continue
+        }
+
+        msgBytes, _ := json.Marshal(message)
+        c.Server.Broadcast <- msgBytes
+    }
 }
 
 func (c *Client) writePump() {
