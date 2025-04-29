@@ -1,0 +1,23 @@
+# Общие системные файлы
+.DS_Store
+node_modules/
+dist/
+build/
+.env
+
+# Go
+chat-server/bin/
+chat-server/pkg/
+*.exe
+*.out
+*.test
+
+# Vite или React build
+chat-client/node_modules/
+chat-client/dist/
+
+# Logs
+*.log
+
+# VSCode настройки (опционально)
+.vscode/
