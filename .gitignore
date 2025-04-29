@@ -18,6 +18,3 @@ chat-client/dist/
 
 # Logs
 *.log
-
-# VSCode настройки (опционально)
-.vscode/
